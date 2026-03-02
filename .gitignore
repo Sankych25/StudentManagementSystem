@@ -1,11 +1,13 @@
-# Ignore Visual Studio files
-.vs/
+# Build folders
 bin/
 obj/
 
-# User-specific files
+# Visual Studio
+.vs/
 *.user
 *.suo
+*.userosscache
+*.sln.docstates
 
 # Logs
 *.log
@@ -13,3 +15,13 @@ obj/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Rider / VS Code
+.vscode/
+.idea/
+
+# Publish folder
+publish/
+
+# Environment files (if sensitive)
+appsettings.Development.json
