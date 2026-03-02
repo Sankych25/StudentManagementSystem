@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<!-- HERO SECTION -->
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h1 class="display-3 fw-bold mb-3">
+            Smart Student Management
+        </h1>
+        <p class="lead text-muted mb-4">
+            Manage student records, track academic progress, and control access securely — all in one powerful system.
+        </p>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-controller="Students" asp-action="Index" class="btn btn-primary btn-lg px-4">
+                Get Started
+            </a>
+            <a asp-controller="Home" asp-action="Privacy" class="btn btn-outline-secondary btn-lg px-4">
+                Learn More
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES SECTION -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Powerful Features</h2>
+            <p class="text-muted">Everything you need to manage students efficiently</p>
+        </div>
+
+        <div class="row g-4 text-center">
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body p-4">
+                        <h4 class="fw-semibold mb-3">Add & Manage Students</h4>
+                        <p class="text-muted">
+                            Register students with complete academic details and maintain organized records.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body p-4">
+                        <h4 class="fw-semibold mb-3">Role-Based Access</h4>
+                        <p class="text-muted">
+                            Secure system with Admin and User roles to protect sensitive information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm h-100 border-0">
+                    <div class="card-body p-4">
+                        <h4 class="fw-semibold mb-3">Fast & Reliable</h4>
+                        <p class="text-muted">
+                            Built with ASP.NET Core and SQL Server for high performance and stability.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- STATS SECTION -->
+<section class="py-5 bg-primary text-white text-center">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-4">
+                <h2 class="fw-bold">100+</h2>
+                <p>Students Managed</p>
+            </div>
+
+            <div class="col-md-4">
+                <h2 class="fw-bold">99.9%</h2>
+                <p>System Reliability</p>
+            </div>
+
+            <div class="col-md-4">
+                <h2 class="fw-bold">24/7</h2>
+                <p>Secure Access</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- CALL TO ACTION -->
+<section class="py-5 text-center">
+    <div class="container">
+        <h2 class="fw-bold mb-3">
+            Ready to Simplify Student Management?
+        </h2>
+        <p class="text-muted mb-4">
+            Start organizing and managing your student data today.
+        </p>
+
+        <a asp-controller="Students" asp-action="Index" class="btn btn-dark btn-lg px-5">
+            Launch Dashboard
+        </a>
+    </div>
+</section>

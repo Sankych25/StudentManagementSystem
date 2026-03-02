@@ -1,0 +1,117 @@
+﻿@model IEnumerable<StudentManagementSystem.Models.Student>
+
+@{
+    ViewData["Title"] = "Student List";
+}
+
+<h2>Student List</h2>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <!-- Search Form -->
+    <form method="get" asp-action="Index" class="d-flex">
+        <input type="text"
+               name="searchString"
+               value="@Context.Request.Query["searchString"]"
+               class="form-control me-2"
+               placeholder="Search by Name" />
+
+        <button type="submit" class="btn btn-secondary me-2">
+            Search
+        </button>
+
+        <a asp-action="Index" class="btn btn-outline-dark">
+            Clear
+        </a>
+    </form>
+
+    <!-- Add Button -->
+    <a asp-action="Create" class="btn btn-primary">
+        + Add Student
+    </a>
+
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Sr. No</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th style="width:200px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@count</td>
+                <td>@item.Name</td>
+                <td>@item.Email</td>
+                <td>@item.Age</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"
+                       class="btn btn-warning btn-sm">Edit</a>
+
+                    <button type="button"
+                            class="btn btn-danger btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteModal"
+                            onclick="setDeleteData(@item.Id, '@item.Name')">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            count++;
+        }
+    </tbody>
+</table>
+<!-- DELETE MODAL -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                Are you sure you want to delete
+                <strong id="studentName"></strong> ?
+            </div>  
+
+            <div class="modal-footer">
+
+                <form asp-action="Delete" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="deleteId" name="id" />
+                    <button type="submit" class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function setDeleteData(id, name) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("studentName").innerText = name;
+    }
+</script>
