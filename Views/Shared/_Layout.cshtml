@@ -96,11 +96,56 @@
         </main>
     </div>
 
+    <!-- Toast Container -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="toast align-items-center text-bg-success border-0 show"
+                 role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Success"]
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast">
+                    </button>
+                </div>
+            </div>
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="toast align-items-center text-bg-danger border-0 show"
+                 role="alert">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        @TempData["Error"]
+                    </div>
+                    <button type="button"
+                            class="btn-close btn-close-white me-2 m-auto"
+                            data-bs-dismiss="toast">
+                    </button>
+                </div>
+            </div>
+        }
+
+    </div>
+
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - StudentManagementSystem - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl, { delay: 3000 }).show();
+            });
+        });
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

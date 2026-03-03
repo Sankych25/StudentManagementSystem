@@ -44,7 +44,8 @@
     </thead>
     <tbody>
         @{
-            int count = 1;
+            // int count = 1;
+            int count = (ViewBag.CurrentPage - 1) * 5 + 1;
         }
         @foreach (var item in Model)
         {
@@ -70,6 +71,55 @@
         }
     </tbody>
 </table>
+@if (ViewBag.TotalPages > 1)
+{
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+
+            <!-- Previous Button -->
+            @if (ViewBag.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage - 1)"
+                       asp-route-searchString="@Context.Request.Query["searchString"]">
+                        Previous
+                    </a>
+                </li>
+            }
+
+            <!-- Page Numbers -->
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@i"
+                       asp-route-searchString="@Context.Request.Query["searchString"]">
+                        @i
+                    </a>
+                </li>
+            }
+
+            <!-- Next Button -->
+            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(ViewBag.CurrentPage + 1)"
+                       asp-route-searchString="@Context.Request.Query["searchString"]">
+                        Next
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+}
+
+
 <!-- DELETE MODAL -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
@@ -107,7 +157,7 @@
             </div>
 
         </div>
-    </div>
+</div>
 </div>
 <script>
     function setDeleteData(id, name) {

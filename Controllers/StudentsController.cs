@@ -1,41 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagementSystem.Data;
 using StudentManagementSystem.Models;
+using StudentManagementSystem.Repositories;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 
 namespace StudentManagementSystem.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class StudentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentsController(IStudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
 
         // GET: Students
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string searchString, int page = 1)
         {
-            var students = _context.Students.AsQueryable();
+            int pageSize = 5;
 
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                searchString = searchString.ToLower();
+            var students = await _studentRepository
+                .GetAllAsync(searchString, page, pageSize);
 
-                students = students.Where(s =>
-                    s.Name.ToLower().Contains(searchString) ||
-                    s.Email.ToLower().Contains(searchString)
-                );
-            }
+            int totalRecords = await _studentRepository
+                .GetTotalCountAsync(searchString);
 
-            return View(await students.ToListAsync());
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            return View(students);
         }
-
         // GET: Students/Create
         public IActionResult Create()
         {
@@ -49,11 +48,11 @@ namespace StudentManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
+                await _studentRepository.AddAsync(student);
+                TempData["Success"] = "Student created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-
+            TempData["Error"] = "Something went wrong while creating.";
             return View(student);
         }
 
@@ -63,7 +62,7 @@ namespace StudentManagementSystem.Controllers
             if (id == null)
                 return NotFound();
 
-            var student = await _context.Students.FindAsync(id);
+            var student = await _studentRepository.GetByIdAsync(id.Value);
 
             if (student == null)
                 return NotFound();
@@ -81,27 +80,31 @@ namespace StudentManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(student);
-                await _context.SaveChangesAsync();
+                await _studentRepository.UpdateAsync(student);
+
+                TempData["Success"] = "Student updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
 
+            TempData["Error"] = "Update failed!";
             return View(student);
         }
-
         // POST: Students/Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var student = await _context.Students.FindAsync(id);
+            var student = await _studentRepository.GetByIdAsync(id);
 
-            if (student != null)
+            if (student == null)
             {
-                _context.Students.Remove(student);
-                await _context.SaveChangesAsync();
+                TempData["Error"] = "Student not found!";
+                return RedirectToAction(nameof(Index));
             }
 
+            await _studentRepository.DeleteAsync(id);
+
+            TempData["Success"] = "Student deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
     }
